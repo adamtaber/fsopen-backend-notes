@@ -1,10 +1,33 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const Note = require('./models/note')
 const app = express()
 
 app.use(express.static('build'))
 app.use(cors())
 app.use(express.json())
+
+// const url = 
+//   `mongodb+srv://adamtaber:${password}@cluster0.ci30vyd.mongodb.net/noteApp?retryWrites=true&w=majority`
+
+// mongoose.set('strictQuery', false)
+// mongoose.connect(url)
+
+// const noteSchema = new mongoose.Schema({
+//   content: String,
+//   important: Boolean
+// })
+
+// noteSchema.set('toJson', {
+//   transform: (document, returnedObject) => {
+//     returnedObject.id = returnedObject._id.toString()
+//     delete returnedObject._id
+//     delete returnedObject.__v
+//   }
+// })
+
+// const Note = mongoose.model('Note', noteSchema)
 
 let notes = [
   {
@@ -25,7 +48,9 @@ let notes = [
 ]
 
 app.get('/api/notes', (request, response) => {
-  response.json(notes)
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
 })
 
 app.get('/api/notes/:id', (request, response) => {
